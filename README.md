@@ -5,6 +5,7 @@ Consolidated skill repository for Bhagyas.
 ## Skills
 
 - `dag-thinking` - model dependency-heavy problems as directed acyclic graphs.
+- `dag-solver` - decompose complex work into independently verifiable DAG nodes with safe delegation.
 - `dag-ooda-problem-solving` - combine OODA loops with NetworkX DAG planning and a helper script.
 - `map-reduce` - process many similar inputs with a map step and deterministic reduce step.
 
@@ -14,6 +15,7 @@ Install a single skill with `npx skills`:
 
 ```bash
 npx skills add bhagyas/skills --skill dag-thinking
+npx skills add bhagyas/skills --skill dag-solver
 npx skills add bhagyas/skills --skill dag-ooda-problem-solving
 npx skills add bhagyas/skills --skill map-reduce
 ```
@@ -29,6 +31,8 @@ npx skills add bhagyas/skills --list
 ```text
 skills/
   dag-thinking/
+    SKILL.md
+  dag-solver/
     SKILL.md
   dag-ooda-problem-solving/
     SKILL.md
