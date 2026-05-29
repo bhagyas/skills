@@ -1,0 +1,12 @@
+[project]
+name = "dag-ooda-problem-solving"
+version = "0.1.0"
+description = "DAG + OODA problem-solving: NetworkX DAGs with impact/effort scoring for structured plans and execution order."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "networkx>=3.0",
+]
+
+[tool.uv]
+dev-dependencies = []
