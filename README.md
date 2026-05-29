@@ -44,5 +44,3 @@ This repo combines these previous standalone skill repos:
 - `bhagyas/dag-thinking-skill`
 - `bhagyas/dag-ooda-problem-solving`
 - `bhagyas/map-reduce-skill`
-
-`bhagyas/awesome-agent-skills` is intentionally not included; it is an index repo, not a skill source.
