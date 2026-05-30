@@ -36,9 +36,10 @@ If a node cannot be verified independently, split it.
 4. Validate that the graph has no cycles.
 5. Group nodes into topological layers.
 
-Use NetworkX for non-trivial graphs:
+Use NetworkX for non-trivial graphs. Prefer running it through `uv` so the dependency is available without mutating the project environment:
 
-```python
+```bash
+uv run --with networkx python - <<'PY'
 import networkx as nx
 
 G = nx.DiGraph()
@@ -49,7 +50,11 @@ G.add_edges_from([
 ])
 assert nx.is_directed_acyclic_graph(G)
 layers = [list(layer) for layer in nx.topological_generations(G)]
+print(layers)
+PY
 ```
+
+If `uv` is unavailable, use the local Python environment only when NetworkX is already installed or the user approves installing it.
 
 ## Node Template
 
