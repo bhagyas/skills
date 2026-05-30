@@ -73,6 +73,18 @@ When skipping an expensive run, record why it is safe to defer and add it as an 
 
 Do not skip expensive verification when the change touches shared behavior, public contracts, build configuration, data migrations, concurrency, security, payments, persistence, or any area where the blast radius is uncertain.
 
+## Source Control Boundaries
+
+Before starting DAG work, protect the starting state:
+- If policy allows autonomous git operations, commit all current work first with a message that clearly describes the baseline.
+- If autonomous git operations are not clearly allowed, ask whether to commit before starting.
+
+After the DAG goal is complete, publish the finished state:
+- If policy allows autonomous git operations, commit the completed work and push it.
+- If autonomous git operations are not clearly allowed, ask whether to commit and push before ending.
+
+Do not silently mix unrelated user changes into DAG work. If unrelated changes are present, either commit them as the baseline before starting or ask how to handle them.
+
 ## Delegation Rules
 
 Delegate a node to a subagent only when all are true:
@@ -93,8 +105,19 @@ When delegating, give the subagent only the node contract: goal, inputs, allowed
 
 Use branches for independent delegated paths. A branch is a set of one or more nodes a subagent can execute without depending on another active branch. Keep branch outputs separate until a conjunction node explicitly requires them together.
 
+Name branches after the purpose of the DAG task or branch path, using a short conventional prefix and a concrete slug. Examples:
+- `feature/new-feature`
+- `bug/discovered-bug`
+- `refactor/extract-shared-parser`
+- `docs/update-release-notes`
+- `test/add-regression-coverage`
+- `investigate/payment-timeout`
+
+The branch name should make the work's intent obvious at a glance. Prefer the final outcome when one branch owns the goal, and prefer the branch-specific purpose when several subagents are exploring independent paths inside the same larger goal.
+
 A conjunction node is the merge point for branches. It must define:
 - Which branch outputs are required.
+- Which branch names are being merged.
 - The compatibility checks between those outputs.
 - The integration work that combines them.
 - The verification proving the merged state works.
@@ -103,16 +126,18 @@ Do not merge branches opportunistically. Merge only when the DAG has an explicit
 
 ## Execution Workflow
 
-1. **Plan**: Build the node list and edges. Mark each node with verification, verification cost, and blast radius.
-2. **Validate**: Check for cycles and unresolved dependencies.
-3. **Select frontier**: Work only on nodes whose prerequisites are complete.
-4. **Look ahead**: Confirm the current frontier, the next unlock, and the downstream conjunction or decision point.
-5. **Parallelize carefully**: Delegate or run in parallel only among frontier nodes with disjoint blast radius, treating each independent path as a branch.
-6. **Verify per node**: Run the node's verification before marking it complete, using targeted checks when they prove the node.
-7. **Integrate at conjunctions**: Merge branches only after all prerequisite branch outputs are verified.
-8. **Defer expensive checks deliberately**: If an expensive run is unnecessary now, add it as a later verification node with the reason for deferral.
-9. **Update graph**: Add, split, reorder, or remove nodes as new facts appear.
-10. **Final verify**: Run end-to-end checks that prove the final outcome, not just the individual nodes.
+1. **Protect baseline**: Commit the current state before work begins, or ask whether to commit if permission is unclear.
+2. **Plan**: Build the node list and edges. Mark each node with verification, verification cost, and blast radius.
+3. **Validate**: Check for cycles and unresolved dependencies.
+4. **Select frontier**: Work only on nodes whose prerequisites are complete.
+5. **Look ahead**: Confirm the current frontier, the next unlock, and the downstream conjunction or decision point.
+6. **Parallelize carefully**: Delegate or run in parallel only among frontier nodes with disjoint blast radius, treating each independent path as a branch.
+7. **Verify per node**: Run the node's verification before marking it complete, using targeted checks when they prove the node.
+8. **Integrate at conjunctions**: Merge branches only after all prerequisite branch outputs are verified.
+9. **Defer expensive checks deliberately**: If an expensive run is unnecessary now, add it as a later verification node with the reason for deferral.
+10. **Update graph**: Add, split, reorder, or remove nodes as new facts appear.
+11. **Final verify**: Run end-to-end checks that prove the final outcome, not just the individual nodes.
+12. **Publish result**: Commit and push the completed work, or ask whether to commit and push if permission is unclear.
 
 ## Handling Cycles
 
@@ -132,11 +157,12 @@ When applying this skill, produce:
 3. **Cycle check**: `acyclic: yes/no`.
 4. **Layers**: Topological execution layers.
 5. **Delegation plan**: Which nodes can run in subagents and why; which must stay local and why.
-6. **Branch plan**: Independent subagent branches and their conjunction nodes.
+6. **Branch plan**: Independent subagent branches, their purpose-based names, and their conjunction nodes.
 7. **Lookahead**: Current frontier, next unlock, and downstream conjunction or decision point.
 8. **Deferred expensive checks**: Commands intentionally postponed, with the reason and the node where they will run.
-9. **Execution status**: Pending, in progress, verified, blocked.
-10. **Final verification**: The integrated checks required before calling the task done.
+9. **Source control plan**: Baseline commit status, final commit plan, and push expectation.
+10. **Execution status**: Pending, in progress, verified, blocked.
+11. **Final verification**: The integrated checks required before calling the task done.
 
 ## Quality Bar
 
@@ -148,4 +174,6 @@ When applying this skill, produce:
 - Re-run the DAG after discoveries that change dependencies.
 - Keep a live three-step lookahead and revise it when reality changes.
 - Make branch merges explicit conjunction nodes with their own verification.
+- Name branches by purpose, such as `feature/<slug>`, `bug/<slug>`, `refactor/<slug>`, `docs/<slug>`, `test/<slug>`, or `investigate/<slug>`.
+- Commit before starting DAG work and commit plus push after finishing, or ask for both decisions when permission is unclear.
 - Never mark a node complete from implementation alone; completion requires verification.
