@@ -8,6 +8,7 @@ Consolidated skill repository for Bhagyas.
 - `dag-solver` - decompose complex work into independently verifiable DAG nodes with safe delegation.
 - `dag-ooda-problem-solving` - combine OODA loops with NetworkX DAG planning and a helper script.
 - `map-reduce` - process many similar inputs with a map step and deterministic reduce step.
+- `exploring-problem-spaces` - navigate ambiguous, multi-step problems with evidence-backed exploration.
 
 ## Install
 
@@ -18,6 +19,7 @@ npx skills add bhagyas/skills --skill dag-thinking
 npx skills add bhagyas/skills --skill dag-solver
 npx skills add bhagyas/skills --skill dag-ooda-problem-solving
 npx skills add bhagyas/skills --skill map-reduce
+npx skills add bhagyas/skills --skill exploring-problem-spaces
 ```
 
 List skills in this repo:
@@ -39,6 +41,9 @@ skills/
     scripts/ooda_dag.py
   map-reduce/
     SKILL.md
+  exploring-problem-spaces/
+    SKILL.md
+    references/
 ```
 
 ## Source Repositories
