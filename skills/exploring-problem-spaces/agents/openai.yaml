@@ -1,0 +1,6 @@
+interface:
+  display_name: "Exploring problem spaces"
+  short_description: "Map, explore, and verify ambiguous multi-step problems before committing to a route."
+
+policy:
+  allow_implicit_invocation: true
