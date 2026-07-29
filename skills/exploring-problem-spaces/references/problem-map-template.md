@@ -18,7 +18,7 @@ Three sizes, chosen by task:
 
 ```
 Goal: 401 on all API requests after Friday's deploy → restored, verified by the user's own request
-Exit test: `curl -s -o /dev/null -w '%{http_code}' $API/v1/orders` returns 200 with the prod token
+Exit test: an authorized `GET /v1/orders` request returns 200 in production
 Facts: 401 began at 14:02 UTC (observed, deploy log); auth code unchanged in this release (observed, git diff)
 Hypotheses: [H1] token/secret rotated in env — medium · [H2] clock skew on new node — low · [H3] upstream IdP config change — medium
 Next: decode the token from the running pod and compare `aud`/`exp`/scopes against the IdP config — read-only, separates H1 from H3
